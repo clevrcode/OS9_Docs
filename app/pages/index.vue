@@ -1,11 +1,9 @@
 <template>
-  <div
-    class="flex flex-1"
-    :class="[
+  <div class="flex flex-1">
+    <!-- :class="[
       variant === 'inset' && 'bg-neutral-50 dark:bg-neutral-950',
       side === 'right' && 'flex-row-reverse',
-    ]"
-  >
+    ]" -->
     <USidebar
       v-model:open="open"
       collapsible="icon"
@@ -46,7 +44,7 @@
         />
       </div>
       <div class="flex-1 p-4">
-        <Placeholder class="size-full" />
+        <!-- <Placeholder class="size-full" /> -->
         <UPageHero title="OS9 Documentation" description="Complete OS9 documentation." />
       </div>
     </div>
@@ -55,7 +53,6 @@
 
 <script setup lang="ts">
 import type { NavigationMenuItem, SidebarProps } from "@nuxt/ui"
-import type { TreeItem } from "@nuxt/ui"
 
 // Ignore the props for the example
 defineProps<Pick<SidebarProps, "variant" | "collapsible" | "side">>()
@@ -65,21 +62,21 @@ const open = ref(true)
 const navitems: NavigationMenuItem[] = [
   {
     label: "Kernel",
-    icon: "i-lucide-house",
+    icon: "i-boxicons-nut",
     active: true,
-    to: "/", // TODO
+    to: "/kernel", // TODO
   },
   {
     label: "Memory Modules",
-    icon: "i-lucide-inbox",
+    icon: "i-streamline-ultimate-module-three",
   },
   {
     label: "Unified I/O",
-    icon: "i-lucide-users",
+    icon: "i-oui-input-output",
   },
   {
     label: "System Calls",
-    icon: "i-lucide-settings",
+    icon: "i-ix-operating-system-settings",
     defaultOpen: true,
     children: [
       {
