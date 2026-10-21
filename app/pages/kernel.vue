@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>KERNEL</h1>
+    <div class="text-2xl">KERNEL</div>
   </div>
 </template>
 

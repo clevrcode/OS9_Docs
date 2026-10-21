@@ -1,0 +1,60 @@
+[
+  {
+    "_id": {
+      "$oid": "6ad6128ec0199c8c8012a167"
+    },
+    "function": "I$ATTACH",
+    "code": 128,
+    "entry": [
+      {
+        "X": "address of device name string"
+      },
+      {
+        "A": "access mode"
+      }
+    ],
+    "exit_success": [
+      {
+        "U": "address of device table entry"
+      }
+    ],
+    "exit_error": [
+      {
+        "CC": "C bit set"
+      },
+      {
+        "B": "error code"
+      }
+    ],
+    "level": [1, 2],
+    "system": false,
+    "description": "<p>Attaches a new device to the system or verifies</p><p>Attach does not reserve the device. It only prepares it for later use by any process.</p> ..."
+  },
+  {
+    "_id": {
+      "$oid": "6ad6175bc0199c8c8012a168"
+    },
+    "function": "I$CHGDIR",
+    "code": 134,
+    "entry": [
+      {
+        "X": "address of the pathlist"
+      },
+      {
+        "A": "access mode"
+      }
+    ],
+    "exit_success": [],
+    "exit_error": [
+      {
+        "CC": "C bit set"
+      },
+      {
+        "B": "error code"
+      }
+    ],
+    "level": [1, 2],
+    "system": false,
+    "description": "<p>Change the process's working directory to the directory specified by the pathlist.</p> ..."
+  }
+]
