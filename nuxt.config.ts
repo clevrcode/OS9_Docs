@@ -25,8 +25,6 @@ export default defineNuxtConfig({
   $development: {
     runtimeConfig: {
       public: {
-        MONGODB_URI:
-          'mongodb+srv://vaillancourtc_db_user:Ge0xHFmySJePv7N3@os9docs.tbrudqj.mongodb.net/',
         api_url: 'http://localhost:3000/api',
       },
     },
