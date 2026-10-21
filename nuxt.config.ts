@@ -24,6 +24,7 @@ export default defineNuxtConfig({
   },
   $development: {
     runtimeConfig: {
+      MONGODB_URI: '',
       public: {
         api_url: 'http://localhost:3000/api',
       },
