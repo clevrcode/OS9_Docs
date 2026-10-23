@@ -1,0 +1,22 @@
+title: ""
+name: 
+function: 
+code: 0xXX
+entry: [
+]
+exit_success: [
+]
+exit_error: [
+    CC: "C bit set"
+    B: "error code"
+]
+level: [ 1,2 ]
+location: IOMAN
+system: false
+description: {{
+}}
+errors: [
+    L1: 
+    L2: 
+]
+---

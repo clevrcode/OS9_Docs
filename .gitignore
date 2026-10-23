@@ -27,3 +27,6 @@ logs
 !.vscode/extensions.json
 
 # dotenv environment variable files
+
+# database generated files
+/database/*.json

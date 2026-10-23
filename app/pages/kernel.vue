@@ -1,9 +1,16 @@
 <template>
-  <div>
-    <div class="text-2xl">KERNEL</div>
+  <div class="kernel-header">
+    <div class="text-2xl">KERNEL1</div>
+    <div class="text-2xl">KERNEL2</div>
+    <div class="text-2xl">KERNEL3</div>
   </div>
 </template>
 
 <script setup></script>
 
-<style scoped></style>
+<style scoped>
+.kernel-header {
+  display: flex;
+  justify-content: space-between;
+}
+</style>

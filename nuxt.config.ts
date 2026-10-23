@@ -2,11 +2,6 @@
 export default defineNuxtConfig({
   modules: ['@nuxt/eslint', '@nuxt/ui', '@pinia/nuxt'],
 
-  experimental: {
-    // Explicitly set this to false to bypass the recursive route type evaluation with Nuxt 4.6
-    routeTypedFetch: false,
-  },
-
   devtools: {
     enabled: true,
   },

@@ -38,9 +38,16 @@
 
 <script setup lang="ts">
 import type { SidebarProps } from '@nuxt/ui'
+const store = useSyscallStore()
 
 // Ignore the props for the example
 defineProps<Pick<SidebarProps, 'variant' | 'collapsible' | 'side'>>()
 
 const open = ref(true)
+
+onMounted(() => {
+  console.log('>>> getIOSystemCall()')
+  const scalls = store.getIOSystemCall()
+  console.log('<<< getIOSystemCall()')
+})
 </script>

@@ -25,6 +25,7 @@
 
 <script setup lang="ts">
 import type { NavigationMenuItem } from '@nuxt/ui'
+const store = useSyscallStore()
 
 const props = defineProps({
   open: {
@@ -33,7 +34,7 @@ const props = defineProps({
   },
 })
 
-const navitems: NavigationMenuItem[] = [
+const navitems = ref<NavigationMenuItem[]>([
   {
     label: 'Home',
     icon: 'i-carbon-home',
@@ -54,101 +55,46 @@ const navitems: NavigationMenuItem[] = [
     label: 'Unified I/O',
     icon: 'i-oui-input-output',
   },
-  {
+])
+
+const iolinks = computed(() => store.syscall_list)
+watch(iolinks, (newLinks, _) => {
+  console.log('IO links updated')
+  let link_io = []
+  let link_sys = []
+  for (const call of newLinks) {
+    if (call.function[0] == 'I') {
+      link_io.push({
+        label: call.function,
+        icon: 'i-iconmind-chapter-outline-thin',
+        to: `/syscall/${call.code}`,
+      })
+    } else if (call.function[0] == 'F') {
+      link_sys.push({
+        label: call.function,
+        icon: 'i-iconmind-chapter-outline-thin',
+        to: `/syscall/${call.code}`,
+      })
+    }
+  }
+  console.log(link_io)
+  console.log(link_sys)
+  navitems.value.push({
     label: 'System Calls',
     icon: 'i-ix-operating-system-settings',
     defaultOpen: true,
     children: [
       {
         label: 'I/O',
-        children: [
-          {
-            label: 'Attach',
-            icon: 'i-iconmind-chapter-outline-thin',
-            to: '/syscall/128',
-          },
-          {
-            label: 'Change Dir',
-            icon: 'i-iconmind-chapter-outline-thin',
-            to: '/syscall/134',
-          },
-          {
-            label: 'Close Path',
-            icon: 'i-iconmind-chapter-outline-thin',
-          },
-          {
-            label: 'Create File',
-            icon: 'i-iconmind-chapter-outline-thin',
-          },
-          {
-            label: 'Delete File',
-            icon: 'i-iconmind-chapter-outline-thin',
-          },
-        ],
-      },
-      {
-        label: 'User',
-        defaultExpanded: true,
-        children: [
-          {
-            label: 'Allocate Bits',
-            icon: 'i-iconmind-chapter-outline-thin',
-          },
-          {
-            label: 'Chain',
-            icon: 'i-iconmind-chapter-outline-thin',
-          },
-          {
-            label: 'Compare Names',
-            icon: 'i-iconmind-chapter-outline-thin',
-          },
-          {
-            label: 'CRC',
-            icon: 'i-iconmind-chapter-outline-thin',
-          },
-          {
-            label: 'Deallocate Bits',
-            icon: 'i-iconmind-chapter-outline-thin',
-          },
-          {
-            label: 'Exit',
-            icon: 'i-iconmind-chapter-outline-thin',
-          },
-        ],
+        children: link_io,
       },
       {
         label: 'System',
-        defaultExpanded: true,
-        children: [
-          {
-            label: 'Allocate 64',
-            icon: 'i-iconmind-chapter-outline-thin',
-          },
-          {
-            label: 'Find 64',
-            icon: 'i-iconmind-chapter-outline-thin',
-          },
-          {
-            label: 'I/O Delete',
-            icon: 'i-iconmind-chapter-outline-thin',
-          },
-          {
-            label: 'I/O Queue',
-            icon: 'i-iconmind-chapter-outline-thin',
-          },
-          {
-            label: 'Insert Process',
-            icon: 'i-iconmind-chapter-outline-thin',
-          },
-          {
-            label: 'Next Process',
-            icon: 'i-iconmind-chapter-outline-thin',
-          },
-        ],
+        children: link_sys,
       },
     ],
-  },
-]
+  })
+})
 </script>
 
 <style scoped></style>

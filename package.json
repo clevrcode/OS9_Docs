@@ -17,7 +17,7 @@
     "@nuxt/ui": "^4.11.3",
     "@pinia/nuxt": "1.0.3",
     "mongodb": "^7.7.0",
-    "nuxt": "^4.6.1",
+    "nuxt": "^4.6.2",
     "pinia": "^4.1.0",
     "tailwindcss": "^4.3.3"
   },

@@ -1,0 +1,150 @@
+title: "Attach a new device to the system"
+name: Attach
+function: I$Attach
+code: 0x80
+entry: [
+    X: "address of device name string"
+    A: "access mode"
+]
+exit_success: [
+    U: "address of device table entry"
+]
+exit_error: [
+    CC: "C bit set"
+    B: "error code"
+]
+level: [1, 2]
+location: IOMAN
+system: false
+ description: {{
+    <p>Attaches a new device to the system or verify that it is already attached</p>
+    <p>The device's name string is used to search the system module directory to see if a device descriptor module with the same name is in memory.</p>
+    <p>The descriptor module will contain the name of the device's file manager, device driver and other related information.</p>
+    <p>If it is found and the device is not already attached, OS9 will link to its file manager and device driver, and then place their address in a new device table entry.</p>
+    <p>Any permanent storage needed by the device driver is allocated, and the driver's initialization routoine is called to initialize the hardware.</p>
+    <p>If the device has already been attached, it will not be reinitialized.</p>
+    <p>An ATTACH system call is not required to perform routine I/O. It does not reserve the device in question, it just prepares it for subsequent use by any process. Most devices are automatically installed, so it is used mostly when devices sre dynsmicslly installed or to verify the existence of a device.</p>
+    <p>IOMAN attaches all devices at open, and detaches them at close.</p>
+    <p>The access mode parameter specifies which subsequent read and/or write operations will be permitted as follows:
+    <li>0 = Use device capabilities.
+    <li>1 = Read only.
+    <li>2 = Write only.
+    <li>3 = Both read and write.
+}}
+errors: [
+    L1: E$DevOvf, E$BMode, E$DevBsy
+    L2: E$DevOvf, E$BMode, E$DevBsy
+]
+---
+title: "Close a path to a file/device"
+name: Close
+function: I$Close
+code: 0x8F
+entry: [
+    A: "Path number"
+]
+exit_success: [
+]
+exit_error: [
+    CC: "C bit set"
+    B: "error code"
+]
+level: [ 1,2 ]
+location: ""
+system: false
+description: {{
+    <p>Close terminates the I/O path specified by the path number. The path number will no longer be valid for any OS9 calls unless it becomes active again via Open, Create or Dup call.</p>
+    <p>Devices that are non-sharable become to other requesting processes.
+    <p>All OS9 internally managed buffers and descriptors are deallocated.
+    <p>Note: Because the OS9 F$EXIT service request automatically closes all open paths, it may not be necessary to close them individually with the OS9 I$CLOSE service request.
+    <p>Standard I/O paths are typically not closed except when it is desired to change the files/devices they correspond to.
+    <p>CAVEATS: I$Close does an implied I$Detach call. If it causes the device use count to become zero, the device termination routine will be executed. (see I$Detach).
+}}
+errors: [
+    L1: E$BPNum
+    L2: E$BPNum
+]
+---
+
+title: "Change Working Directory"
+name: CHDIR
+function: I$ChgDir
+code: 0x86
+entry: [
+    A: "Access Mode"
+    X: "Address of the pathlist"
+]
+exit_success: [
+    X: "Updated past pathlist"
+]
+exit_error: [
+    CC: "C bit set"
+    B: "error code"
+]
+level: [ 1,2 ]
+location: IOMAN
+system: false
+description: {{
+    <p>Change a process working directory to another directory file specified by the pathlist. Depending on the
+    access mode given, the current execution, the current data directory may be changed, or both.</p>
+    <p>The file specified must be a directory file and the caller must have access permission for the specified mode.</p>
+    <p>Access Modes:<li>1 = Read<li>2 = Write<li>3 = Update (read and write)<li>4 = Execute</p>
+    <p>If the access mode is read, write or update, the current data directory is changed. If the access mode is execute, the current execution directory is changed.</p>
+    <p>Note: The shell "CHD" directive uses UPDATE mode, which means you must have both read and write permission to change directories from the shell.</p>
+}}
+errors: [
+    L1: E$BPNam, E$BMode
+    L2: E$BPNam, E$BMode
+]
+---
+
+title: "Create a path to a new file"
+name: CREATE
+function: I$Create
+code: 0x83
+entry: [
+    A: "Access mode"
+    B: "File attributes (access permission)"
+    X: "Address of the pathlist"
+]
+exit_success: [
+    A: "Path number"
+    X: "Updated past the pathlist (trailing blank skipped)"
+]
+exit_error: [
+    CC: "C bit set"
+    B: "error code"
+]
+level: [ 1,2 ]
+location: IOMAN
+system: false
+description: {{
+    <p>Create is used to create a new file on a multifile mass storage device. On non-multifile devices, Create is synonymous with Open.</p>
+    <p>The pathlist is parsed and the new file name is entered in the specified (or default working) directory. The file is given the attributes passed in the B register, with individual bits defined as follow:</p>
+    <p>
+    <li>bit 0 = read
+    <li>bit 1 = write
+    <li>bit 2 = execute
+    <li>bit 3 = public read
+    <li>bit 4 = public write
+    <li>bit 5 = public execute
+    <li>bit 6 = nonsharable file
+    </p>
+    <p>The access mode parameter passed in register A must have the write bit set if any data is to be written to the file. This only affects the file until it is closed, it can be reopened later in any access mode allowed by the file attributes (see OPEN).
+    These access codes are defined as given below:</p>
+    <p>
+    <li>2 = Write only
+    <li>3 = Update (read and write)
+    </p>
+    <p>Note: If the execute bit is set, directory searching will begin with the working execution directory instead of the working data directory.</p>
+    <p>The path number returned by OS9 is used to identify the file in subsequent I/O service requests until the file is closed.</p>
+    <p>Data storege is allocated for the file automatically by WRITE or explicitly by the PUTSTAT call.</p>
+    <p>An error will occur if the pathlist specifies a file name that already exists. Create cannot be used to make directory files (see MAKDIR).</p>
+    <p>CAVEATS: Create causes an implicit I$Attach call. If the device has not previously been attached, the device's initialization routine will be called.</p>
+}}
+errors: [
+    L1: E$PthFul, E$BPNam
+    L2: E$PthFul, E$BPNam
+]
+---
+
