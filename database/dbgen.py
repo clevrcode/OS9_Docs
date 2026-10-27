@@ -20,7 +20,7 @@ def resetObj():
         'level': [],
         'location': '',
         'system': False,
-        'description': '',
+        'description': [],
         'errors': []
     }
     return obj
@@ -34,6 +34,7 @@ def main(infile: str, outfile: str) -> None:
     obj = resetObj()
     state = 0
     state_token = ''
+    begin_li = True
 
     for line in content:
         if len(line) == 0 or line[0] == '#':
@@ -78,7 +79,17 @@ def main(infile: str, outfile: str) -> None:
                 idx = line.index('}}')
                 line = line[:idx].strip()
                 state = 0
-            obj['description'] += line.strip()
+            if line.startswith('<li>'):
+                if begin_li:
+                    obj['description'].append('<ul>')
+                    begin_li = False
+                line += '</li>'
+            else:
+                if not begin_li:
+                    obj['description'].append('</ul>')
+                    begin_li = True
+
+            obj['description'].append(line.strip())
 
         elif state == 2:
             if line == ']':

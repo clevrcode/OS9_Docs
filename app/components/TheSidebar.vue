@@ -62,6 +62,7 @@ watch(iolinks, (newLinks, _) => {
   console.log('IO links updated')
   let link_io = []
   let link_sys = []
+  let link_usr = []
   for (const call of newLinks) {
     if (call.function[0] == 'I') {
       link_io.push({
@@ -75,10 +76,14 @@ watch(iolinks, (newLinks, _) => {
         icon: 'i-iconmind-chapter-outline-thin',
         to: `/syscall/${call.code}`,
       })
+    } else {
+      link_usr.push({
+        label: call.function,
+        icon: 'i-iconmind-chapter-outline-thin',
+        to: `/syscall/${call.code}`,
+      })
     }
   }
-  console.log(link_io)
-  console.log(link_sys)
   navitems.value.push({
     label: 'System Calls',
     icon: 'i-ix-operating-system-settings',
@@ -87,6 +92,10 @@ watch(iolinks, (newLinks, _) => {
       {
         label: 'I/O',
         children: link_io,
+      },
+      {
+        label: 'User',
+        children: link_usr,
       },
       {
         label: 'System',

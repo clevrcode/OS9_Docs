@@ -8,6 +8,7 @@ entry: [
 ]
 exit_success: [
     U: "address of device table entry"
+    X: "Updated past device name"
 ]
 exit_error: [
     CC: "C bit set"
@@ -29,13 +30,14 @@ system: false
     <li>0 = Use device capabilities.
     <li>1 = Read only.
     <li>2 = Write only.
-    <li>3 = Both read and write.
+    <li>3 = Update.
+
 }}
 errors: [
     L1: E$DevOvf, E$BMode, E$DevBsy
     L2: E$DevOvf, E$BMode, E$DevBsy
 ]
----
+-----------------------------------------------------------------
 title: "Close a path to a file/device"
 name: Close
 function: I$Close
@@ -64,10 +66,10 @@ errors: [
     L1: E$BPNum
     L2: E$BPNum
 ]
----
+-----------------------------------------------------------------
 
 title: "Change Working Directory"
-name: CHDIR
+name: Chdir
 function: I$ChgDir
 code: 0x86
 entry: [
@@ -96,10 +98,10 @@ errors: [
     L1: E$BPNam, E$BMode
     L2: E$BPNam, E$BMode
 ]
----
+-----------------------------------------------------------------
 
 title: "Create a path to a new file"
-name: CREATE
+name: Create
 function: I$Create
 code: 0x83
 entry: [
@@ -121,7 +123,6 @@ system: false
 description: {{
     <p>Create is used to create a new file on a multifile mass storage device. On non-multifile devices, Create is synonymous with Open.</p>
     <p>The pathlist is parsed and the new file name is entered in the specified (or default working) directory. The file is given the attributes passed in the B register, with individual bits defined as follow:</p>
-    <p>
     <li>bit 0 = read
     <li>bit 1 = write
     <li>bit 2 = execute
@@ -129,13 +130,10 @@ description: {{
     <li>bit 4 = public write
     <li>bit 5 = public execute
     <li>bit 6 = nonsharable file
-    </p>
     <p>The access mode parameter passed in register A must have the write bit set if any data is to be written to the file. This only affects the file until it is closed, it can be reopened later in any access mode allowed by the file attributes (see OPEN).
     These access codes are defined as given below:</p>
-    <p>
     <li>2 = Write only
     <li>3 = Update (read and write)
-    </p>
     <p>Note: If the execute bit is set, directory searching will begin with the working execution directory instead of the working data directory.</p>
     <p>The path number returned by OS9 is used to identify the file in subsequent I/O service requests until the file is closed.</p>
     <p>Data storege is allocated for the file automatically by WRITE or explicitly by the PUTSTAT call.</p>
@@ -146,5 +144,88 @@ errors: [
     L1: E$PthFul, E$BPNam
     L2: E$PthFul, E$BPNam
 ]
----
+-----------------------------------------------------------------
+title: "Delete a file"
+name: Delete
+function: I$Delete
+code: 0x87
+entry: [
+    X: "Address of pathlist"
+]
+exit_success: [
+    X: Updated past pathlist
+]
+exit_error: [
+    CC: "C bit set"
+    B: "error code"
+]
+level: [ 1,2 ]
+location: IOMAN
+system: false
+description: {{
+    <p>Deletes the disk file specified by the pathlist.</p>
+    <p>The file must have write permissions attributes (public write id the calling process is not the owner).</p>
+    <p>An attempt to delete a device results in an error.</p>
+}}
+errors: [
+    L1: E$BPNam
+    L2: E$BPNam
+]
+-----------------------------------------------------------------
+title: "Remove a device from the system"
+name: Detach
+function: I$Detach
+code: 0x81
+entry: [
+    U: "Address of the device table entry."
+]
+exit_success: [
+]
+exit_error: [
+    CC: "C bit set"
+    B: "error code"
+]
+level: [ 1,2 ]
+location: IOMAN
+system: false
+description: {{
+    <p>Removes a device from the system device table if the device is not being used by another process.</p>
+    <p>The device driver termination routine is called, then any permanent storage assigned to the driver is deallocated.
+    The device driver and file manager modules associated with the device are unlinked.</p>
+    <p>You must use this call to detach devices that were attached using the Attach system call. Both calls are used mainly by IOMAN. SCFMAN also uses Attach/Detach to set up its second device (echo device).</p>
+}}
+errors: [
+    L1: 
+    L2: 
+]
+-----------------------------------------------------------------
+title: "Duplicate a path"
+name: Dup
+function: I$Dup
+code: 0x82
+entry: [
+    A: "Path number of path to duplicate"
+]
+exit_success: [
+    A: "New path number"
+]
+exit_error: [
+    CC: "C bit set"
+    B: "error code"
+]
+level: [ 1,2 ]
+location: IOMAN
+system: false
+description: {{
+    <p>Given the number of an existing path, DUP returns a synonymous path number for the same file or device.</p>
+    <p>SHELL uses this service request when it redirects I/O.</p>
+    <p>Service requests using either the old or new path numbers operate on the same file or device.</p>
+    <p>NOTE: This only increments the 'use count' of a path descriptor and returns the synonymous path number. The path descriptor is NOT copied.
+     It is ususally not a good idea for more than one process to be doinf I/O on the same path concurrently. On RBF files, unpredictable results may be produced.</p>
+}}
+errors: [
+    L1: E$PthFul, E$BPNum
+    L2: E$PthFul, E$BPNum
+]
+-----------------------------------------------------------------
 

@@ -11,7 +11,7 @@
         <div
           class="flex-1 flex flex-col overflow-hidden lg:peer-data-[variant=floating]:my-4 peer-data-[variant=inset]:m-4 lg:peer-data-[variant=inset]:not-peer-data-[collapsible=offcanvas]:ms-0 peer-data-[variant=inset]:rounded-xl peer-data-[variant=inset]:shadow-sm peer-data-[variant=inset]:ring peer-data-[variant=inset]:ring-default bg-default"
         >
-          <div
+          <!-- <div
             class="h-(--ui-header-height) shrink-0 flex items-center px-4"
             :class="[
               variant !== 'floating' && 'border-b border-default',
@@ -25,14 +25,14 @@
               aria-label="Toggle sidebar"
               @click="open = !open"
             />
-          </div>
-          <div class="flex-1 p-4">
+          </div> -->
+          <div class="flex-1 p-4 pb-10">
             <NuxtPage></NuxtPage>
           </div>
         </div>
       </div>
     </main>
-    <TheFooter class="fixed bottom-0 left-0 w-full bg-gray-800 text-white"></TheFooter>
+    <!-- <TheFooter class="fixed bottom-0 left-0 w-full bg-gray-800 text-white"></TheFooter> -->
   </div>
 </template>
 

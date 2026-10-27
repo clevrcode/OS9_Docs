@@ -23,7 +23,7 @@ interface SystemCall {
   level: number[]
   location: string
   system: boolean
-  description: string
+  description: string[]
   errors: Errors[]
 }
 
@@ -45,7 +45,7 @@ export const useSyscallStore = defineStore('syscall', () => {
     level: [],
     location: '',
     system: false,
-    description: '',
+    description: [],
     errors: [],
   })
 

@@ -1,8 +1,8 @@
 <template>
   <div v-if="loaded">
     <!-- <div class="flex flex-wrap flex-row content-between"> -->
-    <div class="syscall-page">
-      <div class="syscall-header">
+    <div class="flex-col absolute font-mono space-y-10">
+      <div class="flex justify-between bg-accented sticky top-0">
         <div class="text-3xl p-4">
           {{ fname }}
         </div>
@@ -13,7 +13,7 @@
           {{ fcall }}
         </div>
       </div>
-      <div class="syscall-content">
+      <div class="m-5 pl-5 space-y-10 overflow-y-scroll">
         <div class="text-2xl">Assembler Call : OS9 {{ fcall }}</div>
         <div class="text-2xl">Machine Code : {{ fcode }}</div>
         <div class="text-2xl">
@@ -34,8 +34,10 @@
             <div class="reg-values pl-4">{{ output.name }} : {{ output.description }}</div>
           </div>
         </div>
-        <div class="text-base">
-          <p v-html="description"></p>
+        <div class="text-2xl list-none pb-12.5">
+          <div v-for="line in description">
+            <p v-html="line" class="py-2.5"></p>
+          </div>
         </div>
       </div>
     </div>
@@ -67,19 +69,4 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
-.syscall-page {
-  display: flex;
-  flex-direction: column;
-}
-
-.syscall-header {
-  display: flex;
-  justify-content: space-between;
-  padding: 20px 10px;
-}
-
-.syscall-content {
-  padding-left: 20px;
-}
-</style>
+<style scoped></style>
